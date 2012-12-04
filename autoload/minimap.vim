@@ -121,7 +121,22 @@ function! minimap#_set_view_range(line, col, start, end)
   silent execute printf('match Search /\(%s\|%s\).*/', p1, p2)
   " move cursor
   call cursor(a:line, a:col)
-  redraw
+  " redraw
+  call minimap#_redraw()
+endfunction
+
+let s:last_redraw_time = [0, 0]
+
+function! minimap#_redraw()
+  let now = reltime()
+  let diff = [now[0] - s:last_redraw_time[0], now[1] - s:last_redraw_time[1]]
+  " inhibit to redraw in 100msec after last redraw.
+  if diff[0] == 0 && diff[1] < 100000
+    return
+  endif
+  " delay redraw by feedkeys()
+  let s:last_redraw_time = now
+  call feedkeys(":redraw\<CR>", 'n')
 endfunction
 
 function! minimap#_set_autosync()
