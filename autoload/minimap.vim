@@ -130,7 +130,6 @@ let s:last_redraw_time = [0, 0]
 function! minimap#_redraw()
   if has('gui_win32')
     redraw
-    return
   else
     call minimap#_redraw2()
   endif
