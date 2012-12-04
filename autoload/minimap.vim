@@ -128,8 +128,18 @@ endfunction
 let s:last_redraw_time = [0, 0]
 
 function! minimap#_redraw()
+  if has('gui_win32')
+    redraw
+    return
+  else
+    call minimap#_redraw2()
+  endif
+endfunction
+
+function! minimap#_redraw2()
   let now = reltime()
-  let diff = [now[0] - s:last_redraw_time[0], now[1] - s:last_redraw_time[1]]
+  let diff = map(split(split(reltimestr(reltime(s:last_redraw_time, now)))[0],
+        \ '\.'), 'v:val + 0')
   " inhibit to redraw in 100msec after last redraw.
   if diff[0] == 0 && diff[1] < 100000
     return
