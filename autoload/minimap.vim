@@ -10,7 +10,7 @@
 scriptencoding utf-8
 
 let s:minimap_id = 'MINIMAP'
-let s:minimap_mode = 0
+let s:minimap_mode = get(s:, 'minimap_mode', 0)
 
 function! minimap#_is_open(id)
   let servers = split(serverlist(), '\n', 0)
